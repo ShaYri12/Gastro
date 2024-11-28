@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+.swiper-button-prev,
+.swiper-button-next {
+  display: none;
+}
+
+.mySwiper .swiper-pagination-bullet {
+  background: white;
+  width: 5px;
+  height: 5px;
+  border-radius: 100%;
+  opacity: 60%;
+}
+
+.mySwiper .swiper-pagination-bullet-active {
+  opacity: 1;
+  background: white;
+  width: 5px;
+  height: 5px;
+  border-radius: 100%;
+  box-shadow: 0px 4px 4px 0px #00000040;
+}
+
+* {
+  font-family: "Urbanist", sans-serif;
+}
