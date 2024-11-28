@@ -161,7 +161,7 @@ export default function MessagesPage() {
   const filteredRestaurants = getFilteredRestaurants();
 
   return (
-    <div className="h-screen bg-white px-[24px]">
+    <div className="h-screen bg-white px-4 lg:px-[24px]">
       {/* Header */}
       <div className="flex justify-between w-full items-center">
         <h1 className="text-[24px] font-[600]">Messages</h1>
@@ -184,9 +184,9 @@ export default function MessagesPage() {
         </div>
       </div>
 
-      <div className="flex pt-[24px]">
+      <div className="flex pt-[24px] gap-[16px]">
         {/* Restaurant list */}
-        <div className="lg:w-[30%] w-[300px] custom-scrollbar space-y-[12px] overflow-y-auto h-[87vh] py-[16px]">
+        <div className="lg:w-[30%] w-[300px] custom-scrollbar space-y-[12px] overflow-y-auto h-[87vh]">
           {filteredRestaurants.map((restaurant) => (
             <div
               key={restaurant.id}
@@ -233,7 +233,7 @@ export default function MessagesPage() {
         </div>
 
         {/* Main content */}
-        <div className="flex-1 flex flex-col gap-[24px] h-[88vh] p-[16px]">
+        <div className="flex-1 flex flex-col gap-[24px] h-[88vh] p-[16px] border border-[#0000001A] rounded-[4px]">
           {/* Selected restaurant header */}
           <div className="flex items-center justify-between border-b border-[#CCCCCC80] bg-white pb-[12px]">
             <div className="flex items-center gap-[12px]">
