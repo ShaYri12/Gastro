@@ -30,3 +30,33 @@
 * {
   font-family: "Urbanist", sans-serif;
 }
+
+/* Global scrollbar styles */
+.custom-scrollbar {
+  /* Webkit-based browsers (Chrome, Safari, Edge) */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #d4d4d4 #f5f5f5; /* Firefox */
+
+  /* Scrollbar styling for Chrome, Edge, Safari */
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+  height: 8px; /* Height of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #a8a8a8; /* Color of the scrollbar thumb */
+  border-radius: 4px; /* Rounded corners for the scrollbar thumb */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #888888; /* Darker color when hovered */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f5f5f5; /* Color of the scrollbar track */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track:hover {
+  background: #e6e6e6; /* Darker track when hovered */
+}

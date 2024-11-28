@@ -157,7 +157,7 @@ export default function MessagesPage() {
     <div className="h-screen bg-white px-[24px]">
       {/* Header */}
       <div className="flex justify-between w-full items-center">
-        <h1 className="p-4 text-[24px] font-[600]">Messages</h1>
+        <h1 className="text-[24px] font-[600]">Messages</h1>
 
         {/* Tabs */}
         <div className="flex overflow-x-auto bg-[#CCCCCC33] rounded-[8px]">
@@ -177,20 +177,24 @@ export default function MessagesPage() {
         </div>
       </div>
 
-      <div className="flex">
+      <div className="flex pt-[24px]">
         {/* Restaurant list */}
-        <div className="lg:w-[30%] w-[300px] space-y-[12px]">
+        <div className="lg:w-[30%] w-[300px] custom-scrollbar space-y-[12px] overflow-y-auto h-[87vh] pb-1">
           {filteredRestaurants.map((restaurant) => (
             <div
               key={restaurant.id}
-              className="p-4 hover:bg-gray-100 cursor-pointer relative border border-[#00000040] rounded-[4px]"
+              className={`p-[12px] hover:bg-gray-100 cursor-pointer relative rounded-[4px] ${
+                selectedRestaurant.id === restaurant.id
+                  ? "border border-[#82110140] bg-[#8211010D]"
+                  : "border border-[#00000040]"
+              }`}
               onClick={() => setSelectedRestaurant(restaurant)}
             >
               <div className="flex gap-4">
-                <div className="w-16 h-16 bg-gray-200 rounded-lg">
+                <div className="w-[114px] h-[93px] bg-gray-200 rounded-[4px]">
                   <img
                     src="/restaurent-img.jpg"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover rounded-[4px]"
                   />
                 </div>
                 <div className="flex-1">
@@ -201,9 +205,9 @@ export default function MessagesPage() {
                     )}
                   </div>
                   <p className="text-sm text-gray-600">{restaurant.date}</p>
-                  <div className="flex justify-between items-center mt-1">
+                  <div className="flex flex-wrap justify-between items-center mt-1">
                     <span
-                      className={`text-xs px-2 py-0.5 rounded-full ${getStatusStyle(
+                      className={`text-[14px] px-2 py-[7px] lg:w-[150px] text-center  font-[700] rounded-full ${getStatusStyle(
                         restaurant.status
                       )}`}
                     >
@@ -220,47 +224,116 @@ export default function MessagesPage() {
         </div>
 
         {/* Main content */}
-        <div className="flex-1 flex flex-col">
-          {/* Messages area */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            <div className="flex justify-center">
-              <span className="text-sm text-gray-500">
-                CREATED ON: 22 JAN, 2025
-              </span>
+        <div className="flex-1 flex flex-col gap-[24px] h-[88vh] p-[16px]">
+          {/* Selected restaurant header */}
+          <div className="flex items-center justify-between border-b border-[#CCCCCC80] bg-white pb-[12px]">
+            <div className="flex items-center gap-[12px]">
+              <div className="w-[93px] h-[63px] bg-gray-200 rounded-[4px]">
+                <img
+                  src="/restaurent-img.jpg"
+                  className="w-full h-full object-cover rounded-[4px]"
+                />
+              </div>
+              <div>
+                <h2 className="font-medium pb-[8px]">
+                  {selectedRestaurant.name}
+                </h2>
+                <div className="flex gap-[12px] items-center">
+                  <span
+                    className={`text-[14px] px-2 py-[7px] lg:w-[150px] text-center font-[700] rounded-full ${getStatusStyle(
+                      selectedRestaurant.status
+                    )}`}
+                  >
+                    {selectedRestaurant.status}
+                  </span>
+                  <p className="text-[15px] uppercase font-[500] text-[#00000099]">
+                    CREATED ON:{" "}
+                    <span className="text-black">
+                      {selectedRestaurant.date}
+                    </span>
+                  </p>
+                </div>
+              </div>
             </div>
-
+            <div className="flex items-center gap-4">
+              <button className="px-[22px] py-[8px] bg-[#821101] text-[15px] text-white rounded-[4px]">
+                VIEW OFFER
+              </button>
+              <button className="p-2 hover:bg-gray-100 rounded-full">
+                <HiOutlineDotsVertical className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+          {/* Messages area */}
+          <div className="flex-1 overflow-y-auto space-y-4 custom-scrollbar lg:pe-1">
             {(messages[selectedRestaurant.id] || []).map((msg) => (
               <div
                 key={msg.id}
                 className={`${
-                  msg.sender.startsWith("ME") ? "flex justify-end" : ""
+                  msg.sender.startsWith("ME")
+                    ? "flex justify-end"
+                    : "flex justify-start"
                 }`}
               >
                 <div
                   className={`${
-                    msg.sender.startsWith("ME") ? "bg-red-50" : "bg-gray-50"
-                  } p-4 rounded-lg max-w-[80%]`}
+                    msg.sender.startsWith("ME")
+                      ? "bg-[#8211010D] border border-[#821101] rounded-r-lg"
+                      : "bg-gray-50 border border-gray-300 rounded-l-lg"
+                  } p-4 max-w-[80%] flex flex-col`}
                 >
-                  <div className="flex items-center gap-2 mb-2">
-                    {msg.sender.startsWith("ME") ? (
-                      <FaUser className="w-5 h-5" />
-                    ) : (
-                      <ImSpoonKnife className="w-5 h-5" />
-                    )}
-                    <span className="font-medium">{msg.sender}</span>
+                  {/* Sender and Time */}
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="flex items-center gap-2">
+                      {msg.sender.startsWith("ME") ? (
+                        <FaUser className="w-5 h-5 text-[#821101]" />
+                      ) : (
+                        <ImSpoonKnife className="w-5 h-5 text-[#821101]" />
+                      )}
+                      <span className="font-medium">{msg.sender}</span>
+                    </div>
                     <span className="text-sm text-gray-500">{msg.time}</span>
                   </div>
+
+                  {/* Message Content */}
                   <p
                     className={`${
-                      msg.type === "update" ? "text-red-700 font-medium" : ""
+                      msg.type === "update"
+                        ? "text-red-700 font-medium"
+                        : "text-black"
                     } mb-2`}
                   >
                     {msg.content}
                   </p>
+
+                  {/* Message Details */}
                   {msg.details && (
                     <p className="text-gray-700 whitespace-pre-line">
                       {msg.details}
                     </p>
+                  )}
+
+                  {/* If there is a restaurant */}
+                  {msg.restaurant && (
+                    <div className="flex items-center gap-2 text-gray-900 font-medium mt-2">
+                      <FaUtensils className="text-red-600" />
+                      <span>{msg.restaurant}</span>
+                    </div>
+                  )}
+
+                  {/* If there is a status */}
+                  {msg.status && (
+                    <div
+                      className={`p-4 rounded-lg ${
+                        msg.status === "REQUESTED OFFER"
+                          ? "bg-red-50 text-red-700"
+                          : msg.status === "OFFER APPROVED"
+                          ? "bg-green-50 text-green-700"
+                          : "bg-gray-50 text-gray-700"
+                      } mt-2`}
+                    >
+                      {msg.status}
+                    </div>
                   )}
                 </div>
               </div>
@@ -279,7 +352,7 @@ export default function MessagesPage() {
               />
               <button
                 onClick={handleSendMessage}
-                className="px-6 py-2 bg-red-700 text-white rounded-lg flex items-center gap-2"
+                className="px-[22px] py-[15px] bg-[#821101] text-white rounded-[4px] flex items-center gap-2"
               >
                 SEND
                 <MdSend className="w-4 h-4" />
@@ -295,15 +368,15 @@ export default function MessagesPage() {
 function getStatusStyle(status) {
   switch (status) {
     case "Confirmed":
-      return "bg-green-100 text-green-800";
+      return "bg-[#28FF4833] text-[#00B61B]";
     case "Cancelled":
-      return "bg-red-100 text-red-800";
+      return "bg-[#E6000033] text-[#E65100]";
     case "In Review":
-      return "bg-yellow-100 text-yellow-800";
+      return "bg-[#FFA11426] text-[#D37E00]";
     case "Adjusted":
-      return "bg-orange-100 text-orange-800";
+      return "bg-[#FFF1DC] text-[#D88C1C]";
     case "Accepted":
-      return "bg-blue-100 text-blue-800";
+      return "bg-[#FFF1DC] text-[#D88C1C]";
     default:
       return "bg-gray-100 text-gray-800";
   }
