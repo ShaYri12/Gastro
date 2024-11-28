@@ -382,7 +382,7 @@ export default function MessagesPage() {
                       handleSendMessage(); // Trigger message send on Enter
                     }
                   }}
-                  className="peer w-full rounded-lg border border-gray-300 px-4 py-4 text-gray-900 placeholder-transparent focus:border-gray-500 focus:outline-none"
+                  className="peer w-full rounded-[4px] border border-gray-300 px-4 py-4 text-gray-900 placeholder-transparent focus:border-gray-500 focus:outline-none"
                   placeholder="Message"
                 />
                 <label
