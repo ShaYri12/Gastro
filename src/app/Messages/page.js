@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { MdSend } from "react-icons/md";
-import { FaUser } from "react-icons/fa";
+import { PiPaperPlaneRightLight } from "react-icons/pi";
+import { FaRegUser } from "react-icons/fa";
 import { ImSpoonKnife } from "react-icons/im";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 
@@ -63,6 +63,7 @@ const mockMessagesByRestaurant = {
       content: "OFFER WAS UPDATED",
       details: 'SUMMARY:\nREPLACED "STEAK" WITH "FISH"',
       time: "11:55 AM",
+      date: "11/28/2024", // Add date field
       type: "update",
     },
     {
@@ -70,6 +71,7 @@ const mockMessagesByRestaurant = {
       sender: "ME - FILIP",
       content: "REQUESTED OFFER",
       time: "11:24 AM",
+      date: "11/28/2024", // Add date field
       type: "request",
     },
     {
@@ -77,6 +79,7 @@ const mockMessagesByRestaurant = {
       sender: "ME - FILIP",
       content: "OFFER APPROVED",
       time: "08:53 PM",
+      date: "11/28/2024", // Add date field
       type: "approval",
     },
   ],
@@ -86,6 +89,7 @@ const mockMessagesByRestaurant = {
       sender: "RESTAURANT 2",
       content: "TABLE RESERVED",
       time: "12:30 PM",
+      date: "11/28/2024", // Add date field
       type: "info",
     },
   ],
@@ -95,6 +99,7 @@ const mockMessagesByRestaurant = {
       sender: "RESTAURANT 3",
       content: "OFFER UNDER REVIEW",
       time: "10:00 AM",
+      date: "11/28/2024", // Add date field
       type: "review",
     },
   ],
@@ -105,6 +110,7 @@ export default function MessagesPage() {
   const [message, setMessage] = useState("");
   const [selectedRestaurant, setSelectedRestaurant] = useState(restaurants[0]);
   const [messages, setMessages] = useState(mockMessagesByRestaurant);
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleSendMessage = () => {
     if (!message.trim()) return;
@@ -117,6 +123,7 @@ export default function MessagesPage() {
         hour: "2-digit",
         minute: "2-digit",
       }),
+      date: new Date().toLocaleDateString(), // Add the current date
       type: "sent",
     };
 
@@ -179,7 +186,7 @@ export default function MessagesPage() {
 
       <div className="flex pt-[24px]">
         {/* Restaurant list */}
-        <div className="lg:w-[30%] w-[300px] custom-scrollbar space-y-[12px] overflow-y-auto h-[87vh] pb-1">
+        <div className="lg:w-[30%] w-[300px] custom-scrollbar space-y-[12px] overflow-y-auto h-[87vh] py-[16px]">
           {filteredRestaurants.map((restaurant) => (
             <div
               key={restaurant.id}
@@ -204,16 +211,18 @@ export default function MessagesPage() {
                       <span className="w-[12px] h-[12px] bg-[#821101] rounded-full"></span>
                     )}
                   </div>
-                  <p className="text-sm text-gray-600">{restaurant.date}</p>
-                  <div className="flex flex-wrap justify-between items-center mt-1">
+                  <p className="text-[15px] font-[500] text-black font-satoshi mt-[4px] mb-[8px]">
+                    {restaurant.date}
+                  </p>
+                  <div className="flex flex-wrap justify-between items-center gap-1">
                     <span
-                      className={`text-[14px] px-2 py-[7px] lg:w-[150px] text-center  font-[700] rounded-full ${getStatusStyle(
+                      className={`text-[14px] px-2 py-[7px] lg:w-[150px] text-center font-[700] rounded-full ${getStatusStyle(
                         restaurant.status
                       )}`}
                     >
                       {restaurant.status}
                     </span>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-[14px] text-black font-satoshi">
                       {restaurant.time}
                     </span>
                   </div>
@@ -246,7 +255,7 @@ export default function MessagesPage() {
                   >
                     {selectedRestaurant.status}
                   </span>
-                  <p className="text-[15px] uppercase font-[500] text-[#00000099]">
+                  <p className="text-[15px] uppercase font-[500] font-satoshi text-[#00000099]">
                     CREATED ON:{" "}
                     <span className="text-black">
                       {selectedRestaurant.date}
@@ -256,7 +265,7 @@ export default function MessagesPage() {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <button className="px-[22px] py-[8px] bg-[#821101] text-[15px] text-white rounded-[4px]">
+              <button className="px-[22px] py-[8px] bg-[#821101] satoshi text-[15px] text-white rounded-[4px]">
                 VIEW OFFER
               </button>
               <button className="p-2 hover:bg-gray-100 rounded-full">
@@ -265,97 +274,132 @@ export default function MessagesPage() {
             </div>
           </div>
           {/* Messages area */}
-          <div className="flex-1 overflow-y-auto space-y-4 custom-scrollbar lg:pe-1">
-            {(messages[selectedRestaurant.id] || []).map((msg) => (
-              <div
-                key={msg.id}
-                className={`${
-                  msg.sender.startsWith("ME")
-                    ? "flex justify-end"
-                    : "flex justify-start"
-                }`}
-              >
-                <div
-                  className={`${
-                    msg.sender.startsWith("ME")
-                      ? "bg-[#8211010D] border border-[#821101] rounded-r-lg"
-                      : "bg-gray-50 border border-gray-300 rounded-l-lg"
-                  } p-4 max-w-[80%] flex flex-col`}
-                >
-                  {/* Sender and Time */}
-                  <div className="flex justify-between items-center mb-2">
-                    <div className="flex items-center gap-2">
-                      {msg.sender.startsWith("ME") ? (
-                        <FaUser className="w-5 h-5 text-[#821101]" />
-                      ) : (
-                        <ImSpoonKnife className="w-5 h-5 text-[#821101]" />
-                      )}
-                      <span className="font-medium">{msg.sender}</span>
-                    </div>
-                    <span className="text-sm text-gray-500">{msg.time}</span>
+          <div className="flex-1 overflow-y-auto space-y-4 custom-scrollbar lg:pe-1 font-satoshi">
+            {/* Grouping messages by date */}
+            {Object.entries(
+              (messages[selectedRestaurant.id] || []).reduce((acc, msg) => {
+                const dateString = msg.date;
+                if (!acc[dateString]) {
+                  acc[dateString] = [];
+                }
+                acc[dateString].push(msg);
+                return acc;
+              }, {})
+            ).map(([date, msgs], index) => {
+              const isToday = date === new Date().toLocaleDateString(); // Check if the date is today's date
+              const displayDate = isToday ? "Today" : date; // Show "Today" if it's the current date
+
+              return (
+                <div key={index} className="space-y-[24px]">
+                  {/* Message Date */}
+                  <div className="flex justify-center">
+                    <span className="px-[24px] py-[4px] bg-[#0000000D] rounded-full text-[13px] font-[#0000000D] text-gray-600">
+                      {displayDate}
+                    </span>
                   </div>
 
-                  {/* Message Content */}
-                  <p
-                    className={`${
-                      msg.type === "update"
-                        ? "text-red-700 font-medium"
-                        : "text-black"
-                    } mb-2`}
-                  >
-                    {msg.content}
-                  </p>
-
-                  {/* Message Details */}
-                  {msg.details && (
-                    <p className="text-gray-700 whitespace-pre-line">
-                      {msg.details}
-                    </p>
-                  )}
-
-                  {/* If there is a restaurant */}
-                  {msg.restaurant && (
-                    <div className="flex items-center gap-2 text-gray-900 font-medium mt-2">
-                      <FaUtensils className="text-red-600" />
-                      <span>{msg.restaurant}</span>
-                    </div>
-                  )}
-
-                  {/* If there is a status */}
-                  {msg.status && (
+                  {/* Message Events */}
+                  {msgs.map((msg, index) => (
                     <div
-                      className={`p-4 rounded-lg a ${
-                        msg.status === "REQUESTED OFFER"
-                          ? "bg-red-50 text-red-700"
-                          : msg.status === "OFFER APPROVED"
-                          ? "bg-green-50 text-green-700"
-                          : "bg-gray-50 text-gray-700"
-                      } mt-2`}
+                      key={index}
+                      className={`space-y-[24px] w-full flex justify-${
+                        msg.sender.startsWith("ME") ? "end" : "start"
+                      }`}
                     >
-                      {msg.status}
+                      <div className="space-y-[8px] w-1/2">
+                        {/* Sender and Time */}
+                        <div
+                          className={`flex items-center w-full justify-between gap-2`}
+                        >
+                          {!msg.sender.startsWith("ME") && (
+                            <div className="flex items-center gap-[8px]">
+                              <span className="w-[20px] h-[20px] rounded-full flex items-center justify-center">
+                                <ImSpoonKnife className="text-[#821101] text-[24px]" />
+                              </span>
+                              <span className="text-[15px] font-[700] font-satoshi">
+                                {msg.sender}
+                              </span>
+                            </div>
+                          )}
+                          <span className="text-[15px] font-[500] font-satoshi text-black">
+                            {msg.time}
+                          </span>
+                          {msg.sender.startsWith("ME") && (
+                            <div className="flex items-center gap-1">
+                              <span className="text-[15px] font-[700] font-satoshi">
+                                <span className="text-[#00000099]">Me -</span>{" "}
+                                <span className="text-black">
+                                  {msg.sender.slice(5)}{" "}
+                                  {/* Remove "Me -" and show the rest */}
+                                </span>
+                              </span>
+                              <span className="w-[24] h-[24px] mb-[2px] rounded-full flex items-center justify-center">
+                                <FaRegUser size={16} strokeWidth={2} />
+                              </span>
+                            </div>
+                          )}
+                        </div>
+
+                        <div
+                          className={`p-[12px] bg-[#8211010D] rounded-[4px] ${
+                            msg.sender.startsWith("ME")
+                              ? "text-right"
+                              : "text-left"
+                          }`}
+                        >
+                          {/* Message Content */}
+                          <p className="font-[500] font-satoshi text-[#821101] italic">
+                            {msg.content}
+                          </p>
+
+                          {/* Message Details */}
+                          {msg.details && (
+                            <p className="text-black font-satoshi whitespace-pre-line mt-2">
+                              {msg.details}
+                            </p>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  )}
+                  ))}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Message input */}
-          <div className="p-4 border-t bg-white">
-            <div className="flex gap-4">
-              <input
-                type="text"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Message"
-                className="flex-1 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-700"
-              />
+          <div className="pt-[16px]">
+            <div className="flex gap-[12px]">
+              <div className="relative w-full">
+                <input
+                  type="text"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSendMessage(); // Trigger message send on Enter
+                    }
+                  }}
+                  className="peer w-full rounded-lg border border-gray-300 px-4 py-4 text-gray-900 placeholder-transparent focus:border-gray-500 focus:outline-none"
+                  placeholder="Message"
+                />
+                <label
+                  className={`absolute left-2 -top-2.5 bg-white px-1 text-sm transition-all
+        peer-placeholder-shown:top-4 peer-placeholder-shown:left-4 peer-placeholder-shown:text-base
+        peer-focus:-top-2.5 peer-focus:left-2 peer-focus:text-sm
+        ${isFocused || message ? "text-gray-600" : "text-gray-400"}`}
+                >
+                  Message
+                </label>
+              </div>
               <button
                 onClick={handleSendMessage}
                 className="px-[22px] py-[15px] bg-[#821101] text-white rounded-[4px] flex items-center gap-2"
               >
                 SEND
-                <MdSend className="w-4 h-4" />
+                <PiPaperPlaneRightLight className="w-4 h-4" />
               </button>
             </div>
           </div>
