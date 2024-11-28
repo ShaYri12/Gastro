@@ -324,7 +324,7 @@ export default function MessagesPage() {
                   {/* If there is a status */}
                   {msg.status && (
                     <div
-                      className={`p-4 rounded-lg ${
+                      className={`p-4 rounded-lg a ${
                         msg.status === "REQUESTED OFFER"
                           ? "bg-red-50 text-red-700"
                           : msg.status === "OFFER APPROVED"
