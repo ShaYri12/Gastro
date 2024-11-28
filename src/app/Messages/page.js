@@ -186,7 +186,7 @@ export default function MessagesPage() {
 
       <div className="flex pt-[24px] gap-[16px]">
         {/* Restaurant list */}
-        <div className="lg:w-[30%] w-[300px] custom-scrollbar space-y-[12px] overflow-y-auto h-[87vh]">
+        <div className="lg:w-[30%] w-[280px] custom-scrollbar space-y-[12px] overflow-y-auto h-[87vh]">
           {filteredRestaurants.map((restaurant) => (
             <div
               key={restaurant.id}
@@ -198,7 +198,7 @@ export default function MessagesPage() {
               onClick={() => setSelectedRestaurant(restaurant)}
             >
               <div className="flex gap-4">
-                <div className="w-[114px] h-[93px] bg-gray-200 rounded-[4px]">
+                <div className="lg:w-[114px] w-[80px] lg:h-[93px] h-[80px] bg-gray-200 rounded-[4px]">
                   <img
                     src="/restaurent-img.jpg"
                     className="w-full h-full object-cover rounded-[4px]"
@@ -247,7 +247,7 @@ export default function MessagesPage() {
                 <h2 className="font-medium pb-[8px]">
                   {selectedRestaurant.name}
                 </h2>
-                <div className="flex gap-[12px] items-center">
+                <div className="flex flex-wrap gap-[12px] items-center">
                   <span
                     className={`text-[14px] px-2 py-[7px] lg:w-[150px] text-center font-[700] rounded-full ${getStatusStyle(
                       selectedRestaurant.status
