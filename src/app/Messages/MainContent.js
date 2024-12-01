@@ -12,6 +12,7 @@ export default function MainContent({
   getStatusStyle,
   updateRestaurantStatus,
   handleAddAutoMessage,
+  updateTimeAndisUnread,
 }) {
   const [message, setMessage] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -55,6 +56,9 @@ export default function MainContent({
       type: "sent",
     };
 
+    const currentTime = newMessage.time; // Capture the message time
+
+    // Add the new message to the messages state
     setMessages((prev) => ({
       ...prev,
       [selectedRestaurant.id]: [
@@ -63,14 +67,17 @@ export default function MainContent({
       ],
     }));
 
-    setMessage(""); // Clear the input
+    setMessage(""); // Clear the input field
 
-    // Check for specific message condition and trigger the automatic response
+    // Trigger automatic response if the message matches the condition
     if (message.trim().toLowerCase() === "sth") {
       setTimeout(() => {
-        handleAddAutoMessage(); // Call the function passed from the parent to add the auto message
-      }, 10000); // Automatic response after 10 seconds
+        handleAddAutoMessage(); // Call the function passed from the parent
+      }, 10000); // Delay response by 10 seconds
     }
+
+    // Update only the time, without changing isUnread
+    updateTimeAndisUnread(selectedRestaurant.id, currentTime, false);
   };
 
   const togglePopup = () => {

@@ -122,14 +122,14 @@ export default function MessagesPage() {
     switch (activeTab) {
       case "ACTIVE":
         return restaurantsState.filter((r) =>
-          ["In Review", "Accepted", "Adjusted", "Archived"].includes(r.status)
+          ["In Review", "Accepted", "Adjusted"].includes(r.status)
         );
       case "CONFIRMED":
         return restaurantsState.filter((r) => r.status === "Confirmed");
       case "CANCELLED":
         return restaurantsState.filter((r) => r.status === "Cancelled");
       case "ARCHIVED":
-        return [];
+        return restaurantsState.filter((r) => r.status === "Archived");
       case "ALL":
       default:
         return restaurantsState;
@@ -171,13 +171,34 @@ export default function MessagesPage() {
         return "bg-[#FFA11426] text-[#D37E00]";
       case "Adjusted":
         return "bg-[#FFF1DC] text-[#D88C1C]";
-      case "Archived":
-        return "bg-[#FFF1DC] text-[#D88C1C]";
       case "Accepted":
         return "bg-[#FFF1DC] text-[#D88C1C]";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-200/50 text-gray-800";
     }
+  };
+
+  const updateTimeAndisUnread = (restaurantId, newTime, isUnread) => {
+    // Use functional update to ensure you're working with the latest state
+    setRestaurantsState((prevRestaurants) => {
+      const updatedRestaurants = prevRestaurants.map((restaurant) =>
+        restaurant.id === restaurantId
+          ? { ...restaurant, time: newTime, isUnread }
+          : restaurant
+      );
+      return updatedRestaurants;
+    });
+
+    // Sync with filteredRestaurants to keep the state consistent
+    setFilteredRestaurants((prevFilteredRestaurants) => {
+      const updatedFilteredRestaurants = prevFilteredRestaurants.map(
+        (restaurant) =>
+          restaurant.id === restaurantId
+            ? { ...restaurant, time: newTime, isUnread }
+            : restaurant
+      );
+      return updatedFilteredRestaurants;
+    });
   };
 
   const handleAddAutoMessage = (message) => {
@@ -193,19 +214,19 @@ export default function MessagesPage() {
       type: "received",
     };
 
-    // Add the automatic message and mark the restaurant as unread
-    setMessages((prev) => ({
-      ...prev,
+    const currentTime = autoMessage.time; // Capture the message time
+
+    // Add the automatic message to the messages state
+    setMessages((prevMessages) => ({
+      ...prevMessages,
       [selectedRestaurant.id]: [
-        ...(prev[selectedRestaurant.id] || []),
+        ...(prevMessages[selectedRestaurant.id] || []),
         autoMessage,
       ],
     }));
 
-    const updatedRestaurants = restaurantsState.map((r) =>
-      r.id === selectedRestaurant.id ? { ...r, isUnread: true } : r
-    );
-    setRestaurantsState(updatedRestaurants); // Update the restaurant's unread state
+    // Update time and mark as unread only if not currently viewed
+    updateTimeAndisUnread(selectedRestaurant.id, currentTime, true);
   };
 
   return (
@@ -246,6 +267,7 @@ export default function MessagesPage() {
           getStatusStyle={getStatusStyle}
           updateRestaurantStatus={updateRestaurantStatus}
           handleAddAutoMessage={handleAddAutoMessage}
+          updateTimeAndisUnread={updateTimeAndisUnread}
         />
       </div>
     </div>
